@@ -2,30 +2,30 @@ import { Film, Plus, ShieldCheck } from "lucide-react";
 import { DragEvent, useRef, useState } from "react";
 
 interface Props {
-  file: File | null;
+  files: File[];
   disabled?: boolean;
-  onFile: (file: File) => void;
+  onFiles: (files: File[]) => void;
 }
 
 const formats = ["MP4", "MOV", "M4V"];
 
-export function Dropzone({ file, disabled, onFile }: Props) {
+export function Dropzone({ files, disabled, onFiles }: Props) {
   const input = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
 
-  function accept(candidate?: File) {
-    if (candidate) onFile(candidate);
+  function accept(candidates?: FileList | null) {
+    if (candidates?.length) onFiles(Array.from(candidates));
   }
 
   function drop(event: DragEvent) {
     event.preventDefault();
     setDragging(false);
-    accept(event.dataTransfer.files[0]);
+    accept(event.dataTransfer.files);
   }
 
   return (
     <button
-      className={`dropzone ${dragging ? "is-dragging" : ""} ${file ? "has-file" : ""}`}
+      className={`dropzone ${dragging ? "is-dragging" : ""} ${files.length ? "has-file" : ""}`}
       type="button"
       disabled={disabled}
       onClick={() => input.current?.click()}
@@ -38,16 +38,22 @@ export function Dropzone({ file, disabled, onFile }: Props) {
         ref={input}
         hidden
         type="file"
+        multiple
         accept="video/mp4,video/quicktime,video/x-m4v"
-        onChange={(event) => accept(event.target.files?.[0])}
+        onChange={(event) => {
+          accept(event.target.files);
+          event.target.value = "";
+        }}
       />
       <span className="reel" aria-hidden="true">
-        {file ? <Film size={30} /> : <Plus size={30} />}
+        {files.length ? <Film size={30} /> : <Plus size={30} />}
       </span>
       <span className="drop-copy">
-        <strong>{file ? file.name : "放入一段滚动录屏"}</strong>
+        <strong>{files.length ? `${files.length} 段录屏已加入` : "放入多段滚动录屏"}</strong>
         <small>
-          {file ? formatBytes(file.size) : "拖到这里，或点击选择视频"}
+          {files.length
+            ? `共 ${formatBytes(files.reduce((total, file) => total + file.size, 0))} · 可继续添加`
+            : "拖到这里，或点击批量选择视频"}
         </small>
       </span>
       <span className="format-row">
@@ -62,4 +68,3 @@ function formatBytes(bytes: number) {
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }
-
