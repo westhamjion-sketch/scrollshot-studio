@@ -19,7 +19,7 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--ink); }
+body { margin: 0; min-width: 320px; min-height: 100vh; min-height: 100dvh; background: var(--ink); }
 button, input { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
@@ -38,7 +38,8 @@ body::before {
 main { position: relative; min-height: 100vh; overflow: hidden; }
 nav {
   width: min(1400px, calc(100% - 64px));
-  height: 82px;
+  min-height: calc(82px + env(safe-area-inset-top));
+  padding-top: env(safe-area-inset-top);
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -55,6 +56,24 @@ nav > div a:hover { color: var(--paper); }
 .code-mark { font: 500 12px "DM Mono"; text-decoration: none; }
 .local-dot { display: flex; align-items: center; gap: 8px; font: 500 11px "DM Mono"; color: var(--muted); text-transform: uppercase; }
 .local-dot::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 0 4px rgba(83,242,207,.1); }
+.local-dot.is-offline { color: var(--danger); }
+.local-dot.is-offline::before { background: var(--danger); box-shadow: 0 0 0 4px rgba(255,140,123,.1); }
+.install-trigger { height: 34px; padding: 0 12px; display: flex; align-items: center; gap: 7px; color: var(--cyan); background: rgba(83,242,207,.07); border: 1px solid rgba(83,242,207,.28); border-radius: 7px; font: 600 11px "Noto Sans SC", sans-serif; cursor: pointer; }
+.install-trigger:hover { background: rgba(83,242,207,.13); border-color: rgba(83,242,207,.5); }
+.offline-banner { width: min(1400px, calc(100% - 64px)); margin: 14px auto -48px; padding: 11px 14px; color: #ffd0c8; background: rgba(255,140,123,.09); border: 1px solid rgba(255,140,123,.25); border-radius: 8px; font-size: 12px; line-height: 1.55; }
+
+.install-overlay { position: fixed; inset: 0; z-index: 50; padding: 24px; display: flex; align-items: flex-end; justify-content: center; background: rgba(3,7,9,.72); backdrop-filter: blur(8px); }
+.install-sheet { width: min(100%, 420px); position: relative; padding: 28px 24px calc(24px + env(safe-area-inset-bottom)); color: var(--paper); background: #151f24; border: 1px solid #344147; border-radius: 22px; box-shadow: 0 28px 90px rgba(0,0,0,.5); }
+.install-close { position: absolute; top: 17px; right: 17px; width: 34px; height: 34px; display: grid; place-items: center; color: var(--muted); background: #0d1417; border: 1px solid var(--line); border-radius: 50%; cursor: pointer; }
+.app-glyph { width: 60px; height: 60px; display: grid; place-items: center; color: var(--ink); background: var(--cyan); border-radius: 17px; box-shadow: 0 10px 28px rgba(83,242,207,.16); }
+.install-sheet > small { display: block; margin-top: 22px; color: var(--cyan); font: 500 9px "DM Mono"; letter-spacing: .16em; }
+.install-sheet h2 { margin: 8px 0 22px; font-size: 22px; line-height: 1.3; }
+.install-sheet ol { margin: 0; padding: 0; display: grid; gap: 10px; list-style: none; }
+.install-sheet li { min-height: 48px; display: grid; grid-template-columns: 32px 1fr; gap: 12px; align-items: center; }
+.install-sheet li > span { width: 30px; height: 30px; display: grid; place-items: center; color: var(--cyan); background: rgba(83,242,207,.07); border: 1px solid rgba(83,242,207,.2); border-radius: 50%; font: 500 10px "DM Mono"; }
+.install-sheet li p { margin: 0; color: #aeb9bb; font-size: 13px; }
+.install-sheet li strong { margin-left: 5px; display: inline-flex; align-items: center; gap: 4px; color: var(--paper); font-weight: 700; }
+.install-done { width: 100%; height: 48px; margin-top: 22px; color: var(--ink); background: var(--cyan); border: 0; border-radius: 9px; font-weight: 800; cursor: pointer; }
 
 .workspace {
   width: min(1400px, calc(100% - 64px));
@@ -170,7 +189,7 @@ nav > div a:hover { color: var(--paper); }
 .result.ready footer b { font: 500 11px "DM Mono"; }
 .download { justify-self: end; display: flex; align-items: center; gap: 8px; padding: 10px 13px; color: var(--ink); background: var(--cyan); border-radius: 7px; text-decoration: none; font-size: 11px; font-weight: 800; }
 
-.page-footer { width: min(1400px, calc(100% - 64px)); margin: 0 auto; padding: 22px 0 34px; display: flex; justify-content: space-between; color: #5d6c70; border-top: 1px solid var(--line); font: 400 10px "DM Mono"; }
+.page-footer { width: min(1400px, calc(100% - 64px)); margin: 0 auto; padding: 22px 0 calc(34px + env(safe-area-inset-bottom)); display: flex; justify-content: space-between; color: #5d6c70; border-top: 1px solid var(--line); font: 400 10px "DM Mono"; }
 
 @media (max-width: 1080px) {
   .workspace { grid-template-columns: 1fr 1.1fr; }
@@ -182,8 +201,11 @@ nav > div a:hover { color: var(--paper); }
 
 @media (max-width: 720px) {
   nav, .workspace, .page-footer { width: min(100% - 32px, 560px); }
-  nav { height: 68px; }
+  nav { min-height: calc(68px + env(safe-area-inset-top)); }
   .local-dot, .brand small { display: none; }
+  nav > div { gap: 12px; }
+  .install-trigger { height: 36px; padding: 0 11px; }
+  .offline-banner { width: min(100% - 32px, 560px); margin-top: 12px; margin-bottom: -30px; }
   .workspace { padding: 52px 0; grid-template-columns: 1fr; gap: 30px; }
   .intro { display: block; }
   .intro h1 { margin: 24px 0 20px; font-size: clamp(48px, 16vw, 68px); }
@@ -195,6 +217,14 @@ nav > div a:hover { color: var(--paper); }
   .result.empty { margin-top: 0; }
   .image-stage { height: 520px; }
   .page-footer { gap: 24px; line-height: 1.6; }
+  .install-overlay { padding: 12px; padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  .install-sheet { border-radius: 22px 22px 16px 16px; }
+}
+
+@media (display-mode: standalone) {
+  nav { position: sticky; top: 0; z-index: 20; background: rgba(11,17,20,.88); backdrop-filter: blur(18px); }
+  .code-mark { display: none; }
+  .workspace { padding-top: 38px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

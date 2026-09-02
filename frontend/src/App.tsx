@@ -1,6 +1,7 @@
 import { ArrowRight, Check, CircleAlert, Sparkles, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Dropzone } from "./components/Dropzone";
+import { InstallApp } from "./components/InstallApp";
 import { ResultPanel } from "./components/ResultPanel";
 import { SettingsPanel } from "./components/SettingsPanel";
 import type { Job, Settings } from "./types";
@@ -21,10 +22,21 @@ export default function App() {
   const [items, setItems] = useState<UploadItem[]>([]);
   const [settings, setSettings] = useState(defaults);
   const [error, setError] = useState("");
+  const [online, setOnline] = useState(navigator.onLine);
   const busy = items.some((item) => item.uploading || (item.job && !["done", "failed"].includes(item.job.state)));
   const readyCount = items.filter((item) => !item.uploading && !item.job && !item.error).length;
   const jobs = items.flatMap((item) => item.job ? [item.job] : []);
   const pollingKey = jobs.map((job) => `${job.id}:${job.state}`).join("|");
+
+  useEffect(() => {
+    const updateConnection = () => setOnline(navigator.onLine);
+    window.addEventListener("online", updateConnection);
+    window.addEventListener("offline", updateConnection);
+    return () => {
+      window.removeEventListener("online", updateConnection);
+      window.removeEventListener("offline", updateConnection);
+    };
+  }, []);
 
   useEffect(() => {
     const active = jobs.filter((job) => !["done", "failed"].includes(job.state));
@@ -93,8 +105,10 @@ export default function App() {
     <main>
       <nav>
         <a className="brand" href="#top"><i><Sparkles size={16} /></i><span>卷轴</span><small>SCROLLSHOT</small></a>
-        <div><span className="local-dot">处理服务就绪</span><a className="code-mark" href="#architecture" aria-label="代码架构">&lt;/&gt;</a></div>
+        <div><span className={`local-dot ${online ? "" : "is-offline"}`}>{online ? "处理服务就绪" : "等待网络"}</span><InstallApp /><a className="code-mark" href="#architecture" aria-label="代码架构">&lt;/&gt;</a></div>
       </nav>
+
+      {!online && <div className="offline-banner" role="status">当前已离线。可以浏览页面，连接网络后才能上传和生成长图。</div>}
 
       <div className="workspace" id="top">
         <section className="intro">

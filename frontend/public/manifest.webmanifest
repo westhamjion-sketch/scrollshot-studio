@@ -1,0 +1,34 @@
+{
+  "name": "卷轴 · 录屏转长图",
+  "short_name": "卷轴",
+  "description": "把手机滚动录屏自动拼接为清晰、连续的长图。",
+  "lang": "zh-CN",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b1114",
+  "theme_color": "#0b1114",
+  "categories": ["photo", "video", "utilities"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "生成长图",
+      "short_name": "选择录屏",
+      "url": "/#top",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
