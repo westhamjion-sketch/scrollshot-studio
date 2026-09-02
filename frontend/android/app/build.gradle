@@ -1,8 +1,24 @@
 apply plugin: 'com.android.application'
 
+def releaseStoreFile = System.getenv('SCROLLSHOT_KEYSTORE_PATH')
+def releaseStorePassword = System.getenv('SCROLLSHOT_KEYSTORE_PASSWORD')
+def releaseKeyAlias = System.getenv('SCROLLSHOT_KEY_ALIAS')
+def releaseKeyPassword = System.getenv('SCROLLSHOT_KEY_PASSWORD')
+def hasReleaseSigning = releaseStoreFile && releaseStorePassword && releaseKeyAlias && releaseKeyPassword
+
 android {
     namespace = "com.westhamjion.scrollshot"
     compileSdk = rootProject.ext.compileSdkVersion
+    signingConfigs {
+        release {
+            if (hasReleaseSigning) {
+                storeFile file(releaseStoreFile)
+                storePassword releaseStorePassword
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
+            }
+        }
+    }
     defaultConfig {
         applicationId "com.westhamjion.scrollshot"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -18,6 +34,9 @@ android {
     }
     buildTypes {
         release {
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
