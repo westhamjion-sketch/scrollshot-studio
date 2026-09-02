@@ -101,7 +101,7 @@ export default function App() {
           <div className="eyebrow"><i /> 滚动录屏 → 一张长图</div>
           <h1>让页面<br /><em>完整展开。</em></h1>
           <p>自动追踪每一次纵向滚动，裁掉固定栏与重复画面，把手机录屏还原成清晰、连续的 PNG。</p>
-          <div className="proof"><span>像素级衔接</span><span>原画质导出</span><span>本地不留存</span></div>
+          <div className="proof"><span>像素级衔接</span><span>原画质导出</span><span>任务隔离处理</span></div>
         </section>
 
         <section className="console">
@@ -142,7 +142,7 @@ export default function App() {
 
         <ResultPanel jobs={jobs} onReset={reset} />
       </div>
-      <footer className="page-footer" id="architecture"><span>卷轴 / Scrollshot Studio</span><small>视频只在当前设备处理，刷新服务后任务记录自动清空。</small></footer>
+      <footer className="page-footer" id="architecture"><span>卷轴 / Scrollshot Studio</span><small>视频上传至处理服务；服务重启后任务记录自动清空。</small></footer>
     </main>
   );
 }

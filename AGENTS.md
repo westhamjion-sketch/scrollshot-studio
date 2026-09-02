@@ -17,7 +17,8 @@
 
 ### Railway runtime
 
-- Build: root `Dockerfile`
+- Build: root `Dockerfile` (automatically detected)
 - Public port: injected through Railway's `PORT` variable
 - Runtime data: `SCROLLSHOT_DATA_DIR=/data/jobs`
 - Optional persistent volume mount: `/data`
+- Healthcheck is configured in the Railway service settings because legacy Config as Code is unavailable for new services.

@@ -58,7 +58,7 @@ export function Dropzone({ files, disabled, onFiles }: Props) {
       </span>
       <span className="format-row">
         {formats.map((format) => <i key={format}>{format}</i>)}
-        <em><ShieldCheck size={13} /> 本地处理</em>
+        <em><ShieldCheck size={13} /> 云端处理</em>
       </span>
     </button>
   );
