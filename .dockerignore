@@ -1,0 +1,17 @@
+.git
+.gitignore
+.DS_Store
+.venv
+.run
+frontend/node_modules
+frontend/dist
+data/jobs/*
+__pycache__
+*.py[cod]
+*.log
+*.mp4
+*.mov
+*.m4v
+*.png
+*.jpg
+*.jpeg

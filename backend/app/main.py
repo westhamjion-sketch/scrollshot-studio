@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import shutil
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -9,13 +10,15 @@ from uuid import uuid4
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.models import Job, StitchConfig
 from app.services.stitcher import ScrollStitcher
 
 
 ROOT = Path(__file__).resolve().parents[2]
-DATA_DIR = ROOT / "data" / "jobs"
+DATA_DIR = Path(os.environ.get("SCROLLSHOT_DATA_DIR", ROOT / "data" / "jobs"))
+FRONTEND_DIST = ROOT / "frontend" / "dist"
 ALLOWED_SUFFIXES = {".mp4", ".mov", ".m4v"}
 MAX_UPLOAD_BYTES = 500 * 1024 * 1024
 
@@ -130,3 +133,9 @@ def require_finished_job(job_id: str) -> Job:
         raise HTTPException(409, "长图尚未生成。")
     return job
 
+
+# Railway exposes one public port. In production the compiled React app is
+# served by FastAPI so the browser and API stay on the same HTTPS origin.
+# Keep this mount last so it never shadows /api routes.
+if FRONTEND_DIST.is_dir():
+    app.mount("/", StaticFiles(directory=FRONTEND_DIST, html=True), name="frontend")
