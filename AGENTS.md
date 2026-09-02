@@ -1,7 +1,7 @@
 ## Deploy Configuration (configured by /setup-deploy)
 
 - Platform: Railway
-- Production URL: assigned by Railway after the first successful deployment
+- Production URL: https://scrollshot-studio-production.up.railway.app
 - Deploy workflow: automatic deployment from GitHub `main`
 - Deploy status command: HTTP health check
 - Merge method: direct push to `main`
