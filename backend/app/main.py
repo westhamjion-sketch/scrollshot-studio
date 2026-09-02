@@ -25,7 +25,13 @@ MAX_UPLOAD_BYTES = 500 * 1024 * 1024
 app = FastAPI(title="Scrollshot Studio API", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "capacitor://localhost",
+        "http://localhost",
+        "https://localhost",
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )

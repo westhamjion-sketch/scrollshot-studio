@@ -90,3 +90,23 @@ Railway 要求请求体在 5 分钟内上传完成。网络较慢时，大视频
 - Android：用 Chrome 打开网站，点击“安装 App”；如果浏览器没有直接弹出安装框，请在菜单中选择“安装应用”或“添加到主屏幕”。
 
 安装后会以独立窗口运行，并显示“卷轴”主屏幕图标。页面外壳可离线打开，但视频上传和长图生成仍需连接网络。
+
+## iOS / Android 原生工程
+
+`frontend/ios` 和 `frontend/android` 是 Capacitor 8 生成的原生工程，应用标识统一为 `com.westhamjion.scrollshot`。原生包内置前端页面，并通过 HTTPS 调用 Railway 处理服务；生成完成后使用系统分享面板保存或分享长图。
+
+同步最新网页代码：
+
+```bash
+cd frontend
+npm run native:sync
+```
+
+打开原生工程：
+
+```bash
+npm run native:ios
+npm run native:android
+```
+
+完整的签名、商店文案和提交步骤见 [`STORE_RELEASE.md`](./STORE_RELEASE.md)。

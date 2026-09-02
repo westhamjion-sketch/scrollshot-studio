@@ -187,9 +187,12 @@ nav > div a:hover { color: var(--paper); }
 .result.ready footer div { display: grid; gap: 3px; }
 .result.ready footer small { color: var(--muted); font-size: 9px; }
 .result.ready footer b { font: 500 11px "DM Mono"; }
-.download { justify-self: end; display: flex; align-items: center; gap: 8px; padding: 10px 13px; color: var(--ink); background: var(--cyan); border-radius: 7px; text-decoration: none; font-size: 11px; font-weight: 800; }
+.download { justify-self: end; display: flex; align-items: center; gap: 8px; padding: 10px 13px; color: var(--ink); background: var(--cyan); border: 0; border-radius: 7px; text-decoration: none; font-size: 11px; font-weight: 800; cursor: pointer; }
+.download:disabled { opacity: .62; cursor: wait; }
+.native-save-error { margin: 0 14px 14px; padding: 10px 12px; color: var(--danger); background: rgba(255,140,123,.08); border: 1px solid rgba(255,140,123,.22); border-radius: 8px; font-size: 11px; }
 
 .page-footer { width: min(1400px, calc(100% - 64px)); margin: 0 auto; padding: 22px 0 calc(34px + env(safe-area-inset-bottom)); display: flex; justify-content: space-between; color: #5d6c70; border-top: 1px solid var(--line); font: 400 10px "DM Mono"; }
+.page-footer a { color: #7f918f; text-underline-offset: 3px; }
 
 @media (max-width: 1080px) {
   .workspace { grid-template-columns: 1fr 1.1fr; }

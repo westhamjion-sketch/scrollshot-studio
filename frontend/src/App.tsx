@@ -1,5 +1,6 @@
 import { ArrowRight, Check, CircleAlert, Sparkles, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { apiUrl } from "./api";
 import { Dropzone } from "./components/Dropzone";
 import { InstallApp } from "./components/InstallApp";
 import { ResultPanel } from "./components/ResultPanel";
@@ -43,8 +44,12 @@ export default function App() {
     if (!active.length) return;
     const timer = window.setInterval(async () => {
       const updates = await Promise.all(active.map(async (job) => {
-        const response = await fetch(`/api/jobs/${job.id}`);
-        return response.ok ? await response.json() as Job : job;
+        try {
+          const response = await fetch(apiUrl(`/api/jobs/${job.id}`));
+          return response.ok ? await response.json() as Job : job;
+        } catch {
+          return job;
+        }
       }));
       const byId = new Map(updates.map((job) => [job.id, job]));
       setItems((current) => current.map((item) => item.job && byId.has(item.job.id)
@@ -82,7 +87,7 @@ export default function App() {
       data.append("content_top_ratio", String(settings.topRatio));
       data.append("content_bottom_ratio", String(settings.bottomRatio));
       try {
-        const response = await fetch("/api/jobs", { method: "POST", body: data });
+        const response = await fetch(apiUrl("/api/jobs"), { method: "POST", body: data });
         const payload = await response.json();
         if (!response.ok) throw new Error(payload.detail || "上传失败");
         setItems((current) => current.map((candidate) => candidate.key === item.key
@@ -156,7 +161,7 @@ export default function App() {
 
         <ResultPanel jobs={jobs} onReset={reset} />
       </div>
-      <footer className="page-footer" id="architecture"><span>卷轴 / Scrollshot Studio</span><small>视频上传至处理服务；服务重启后任务记录自动清空。</small></footer>
+      <footer className="page-footer" id="architecture"><span>卷轴 / Scrollshot Studio</span><small>视频上传至处理服务；服务重启后任务记录自动清空。 <a href="/privacy.html">隐私说明</a></small></footer>
     </main>
   );
 }

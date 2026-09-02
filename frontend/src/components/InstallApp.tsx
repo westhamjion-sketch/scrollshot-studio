@@ -1,4 +1,5 @@
 import { Download, MoreVertical, Share, Smartphone, X } from "lucide-react";
+import { Capacitor } from "@capacitor/core";
 import { useEffect, useState } from "react";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -39,7 +40,7 @@ export function InstallApp() {
     };
   }, []);
 
-  if (installed) return null;
+  if (installed || Capacitor.isNativePlatform()) return null;
 
   async function install() {
     if (promptEvent) {
