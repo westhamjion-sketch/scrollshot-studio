@@ -21,6 +21,7 @@ DATA_DIR = Path(os.environ.get("SCROLLSHOT_DATA_DIR", ROOT / "data" / "jobs"))
 FRONTEND_DIST = ROOT / "frontend" / "dist"
 ALLOWED_SUFFIXES = {".mp4", ".mov", ".m4v"}
 MAX_UPLOAD_BYTES = 500 * 1024 * 1024
+PROCESS_WORKERS = max(1, min(int(os.environ.get("SCROLLSHOT_WORKERS", "2")), 4))
 
 app = FastAPI(title="Scrollshot Studio API", version="1.0.0")
 app.add_middleware(
@@ -38,7 +39,7 @@ app.add_middleware(
 
 jobs: dict[str, Job] = {}
 jobs_lock = Lock()
-pool = ThreadPoolExecutor(max_workers=2, thread_name_prefix="scrollshot")
+pool = ThreadPoolExecutor(max_workers=PROCESS_WORKERS, thread_name_prefix="scrollshot")
 
 
 @app.get("/api/health")

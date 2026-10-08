@@ -71,16 +71,16 @@ scrollshot-studio/
 
 当前实现是可直接运行的单机产品。部署为多人服务时，建议把任务状态迁移到 Redis、文件放入对象存储、处理器切换为独立 worker，并在网关层补充登录、配额和病毒扫描。
 
-## Railway 部署
+## Render 免费部署
 
-仓库根目录包含生产用 `Dockerfile`。Railway 会在构建阶段编译 React 前端，再由 FastAPI 通过同一公网端口提供页面和 API。
+仓库根目录包含生产用 `Dockerfile` 和 `render.yaml`。Render 会在构建阶段编译 React 前端，再由 FastAPI 通过同一公网端口提供页面和 API。
 
-1. 在 Railway 选择 **Deploy from GitHub repo**，连接本仓库。
-2. 在服务设置中生成公网域名。
-3. 如需跨重启保留任务文件，创建 Volume 并挂载到 `/data`。
-4. 在服务设置中把 Healthcheck Path 设为 `/api/health`。
+1. 在 Render 选择 **New Blueprint**，连接本仓库。
+2. Render 会读取 `render.yaml` 创建免费的 Docker Web Service。
+3. Health Check Path 已配置为 `/api/health`。
+4. 免费实例空闲 15 分钟后会休眠，下一次访问通常需要约一分钟唤醒。
 
-Railway 要求请求体在 5 分钟内上传完成。网络较慢时，大视频应压缩后再上传。
+免费实例只有 512 MB 内存并使用临时文件系统，因此处理并发限制为 1；服务重启或休眠后历史任务会清空。网络较慢时，大视频应压缩后再上传。
 
 ## 安装到手机
 

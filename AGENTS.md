@@ -1,7 +1,7 @@
 ## Deploy Configuration (configured by /setup-deploy)
 
-- Platform: Railway
-- Production URL: https://scrollshot-studio-production.up.railway.app
+- Platform: Render Free Web Service
+- Production URL: https://scrollshot-studio-westhamjion.onrender.com
 - Deploy workflow: automatic deployment from GitHub `main`
 - Deploy status command: HTTP health check
 - Merge method: direct push to `main`
@@ -12,13 +12,14 @@
 
 - Pre-merge: `PYTHONPATH=backend .venv/bin/python -m unittest discover -s tests -v && npm --prefix frontend run build`
 - Deploy trigger: automatic on push to `main`
-- Deploy status: poll the Railway deployment and production URL
+- Deploy status: poll the Render deployment and production URL
 - Health check: `GET /api/health` must return HTTP 200
 
-### Railway runtime
+### Render runtime
 
-- Build: root `Dockerfile` (automatically detected)
-- Public port: injected through Railway's `PORT` variable
-- Runtime data: `SCROLLSHOT_DATA_DIR=/data/jobs`
-- Optional persistent volume mount: `/data`
-- Healthcheck is configured in the Railway service settings because legacy Config as Code is unavailable for new services.
+- Blueprint: root `render.yaml`
+- Build: root `Dockerfile`
+- Public port: injected through Render's `PORT` variable
+- Runtime data: `SCROLLSHOT_DATA_DIR=/tmp/scrollshot/jobs` (ephemeral)
+- Free-instance processing: `SCROLLSHOT_WORKERS=1`
+- Healthcheck: `/api/health`

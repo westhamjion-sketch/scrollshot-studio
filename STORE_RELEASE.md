@@ -7,7 +7,7 @@
 - iOS Bundle ID：`com.westhamjion.scrollshot`
 - Android Application ID：`com.westhamjion.scrollshot`
 - 当前版本：`1.0.0`（构建号 `1`）
-- 隐私政策：`https://scrollshot-studio-production.up.railway.app/privacy.html`
+- 隐私政策：`https://scrollshot-studio-westhamjion.onrender.com/privacy.html`
 - 支持页面：`https://github.com/westhamjion-sketch/scrollshot-studio/issues`
 
 ## 建议商店文案
@@ -47,7 +47,7 @@ npm install
 npm run native:sync
 ```
 
-`native:sync` 会使用 `.env.native` 中的 Railway API 地址构建前端，然后复制到 iOS 和 Android 工程。
+`native:sync` 会使用 `.env.native` 中的 Render API 地址构建前端，然后复制到 iOS 和 Android 工程。
 
 ## iOS 提交流程
 

@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: scrollshot-studio-westhamjion
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: main
+    autoDeployTrigger: commit
+    healthCheckPath: /api/health
+    envVars:
+      - key: SCROLLSHOT_DATA_DIR
+        value: /tmp/scrollshot/jobs
+      - key: SCROLLSHOT_WORKERS
+        value: "1"
